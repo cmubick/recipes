@@ -77,7 +77,7 @@
         * Date (multiple days based on planner dates?)
 
 # Technologies
-https://doug-martin.github.io/nestjs-query/
-https://www.primefaces.org/primevue/
-https://v3.vuejs.org/
-https://docs.nestjs.com/
+- [nestjs-query](https://doug-martin.github.io/nestjs-query/)
+- [primevue](https://www.primefaces.org/primevue/)
+- [vue](https://v3.vuejs.org/)
+- [nestjs](https://docs.nestjs.com/)
