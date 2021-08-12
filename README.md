@@ -75,3 +75,9 @@
     * Model (generated from exiting meal plan)
         * Preferences (See preferences model) (stretch)
         * Date (multiple days based on planner dates?)
+
+# Technologies
+https://doug-martin.github.io/nestjs-query/
+https://www.primefaces.org/primevue/
+https://v3.vuejs.org/
+https://docs.nestjs.com/
