@@ -11,15 +11,24 @@
         * Full name
         * Email
         * Password
-        * Username (optional)
-        * Allergies (optional)
-        * Birthdate (optional)
-        * Gender (optional)
-        * Household Size (optional)
-        * Number kids (optional)
+        * Username (stretch)
+        * Allergies (stretch)
+        * Birthdate (stretch)
+        * Gender (stretch)
+        * Number kids (stretch)
             * Kid age
             * Allergies
-        * Preferences (see Preference model)
+        * Preferences (see Preference model) (stretch)
+* Household
+    * Views
+        * Create
+        * Read
+        * Update
+    * Model
+        * Name
+        * Address
+        * Size
+        * Profiles (See Profile model)
 * Preferences (Stretch)
     * Views
         * Create
@@ -66,6 +75,7 @@
     * Model
         * Name
         * Week (Date range)
+        * Household (See Household model)
         * Recipe List (See Recipe model)
 * Shopping List (of Ingredients)
     * Views
