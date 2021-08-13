@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { ProfileEntity } from './profile.entity'
 import * as argon2 from 'argon2'
-import { UnauthorizedException } from '@nestjs/common'
+import { LoginInput } from './inputs/login.input'
 
 @QueryService(ProfileEntity)
 export class ProfileService extends TypeOrmQueryService<ProfileEntity> {
@@ -14,12 +14,12 @@ export class ProfileService extends TypeOrmQueryService<ProfileEntity> {
     super(repo)
   }
 
-  async login(email: string, password: string): Promise<ProfileEntity> {
-    const profile = await this.repo.findOne({ email })
-    if (!profile) throw new UnauthorizedException('invalid credentials')
+  async login(loginInput: LoginInput): Promise<ProfileEntity> {
+    const profile = await this.repo.findOne({ email: loginInput.email })
+    if (!profile) return null
 
-    const verified = await argon2.verify(profile.password, password)
-    if (!verified) throw new UnauthorizedException('invalid credentials')
+    const verified = await argon2.verify(profile.password, loginInput.password)
+    if (!verified) return null
 
     return profile
   }

@@ -1,11 +1,15 @@
-import { ProfileInputDTO } from './profile.input'
+import { ProfileInputDTO } from './inputs/profile.input'
 import { CRUDResolver } from '@nestjs-query/query-graphql'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import { ProfileDto } from './profile.dto'
 import { ProfileService } from './profile.service'
+import { LoginInput } from './inputs/login.input'
+import { RolesGuard } from 'src/guards/roles.guard'
+import { AccessToken } from 'src/jwt/access-token.model'
 
 @Resolver(() => ProfileDto)
 export class ProfileResolver extends CRUDResolver(ProfileDto, {
+  guards: [RolesGuard],
   CreateDTOClass: ProfileInputDTO,
   UpdateDTOClass: ProfileInputDTO,
   create: { many: { disabled: true } },
@@ -16,11 +20,9 @@ export class ProfileResolver extends CRUDResolver(ProfileDto, {
     super(service)
   }
 
-  @Query(() => ProfileDto)
-  async login(
-    @Args('email') email: string,
-    @Args('password') password: string,
-  ) {
-    return this.service.login(email, password)
+  @Query(() => AccessToken)
+  async login(@Args('login') loginInput: LoginInput) {
+    const profile = await this.service.login(loginInput)
+    return new AccessToken(profile)
   }
 }

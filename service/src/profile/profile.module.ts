@@ -14,5 +14,6 @@ import { ProfileService } from './profile.service'
     }),
   ],
   providers: [ProfileService, ProfileResolver],
+  exports: [ProfileService],
 })
 export class ProfileModule {}
