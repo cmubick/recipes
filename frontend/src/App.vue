@@ -1,5 +1,5 @@
 <template>
-  <HelloWorld msg="Recipes" />
+  <HelloWorld />
 </template>
 
 <script setup>

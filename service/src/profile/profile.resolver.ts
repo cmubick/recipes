@@ -1,6 +1,6 @@
 import { ProfileInputDTO } from './inputs/profile.input'
 import { CRUDResolver } from '@nestjs-query/query-graphql'
-import { Args, Query, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { ProfileDto } from './profile.dto'
 import { ProfileService } from './profile.service'
 import { LoginInput } from './inputs/login.input'
@@ -20,7 +20,7 @@ export class ProfileResolver extends CRUDResolver(ProfileDto, {
     super(service)
   }
 
-  @Query(() => AccessToken)
+  @Mutation(() => AccessToken)
   async login(@Args('login') loginInput: LoginInput) {
     const profile = await this.service.login(loginInput)
     return new AccessToken(profile)
