@@ -4,12 +4,12 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { ProfileDto } from './profile.dto'
 import { ProfileService } from './profile.service'
 import { LoginInput } from './inputs/login.input'
-import { RolesGuard } from 'src/guards/roles.guard'
+import { AuthGuard } from 'src/guards/auth.guard'
 import { AccessToken } from 'src/jwt/access-token.model'
 
 @Resolver(() => ProfileDto)
 export class ProfileResolver extends CRUDResolver(ProfileDto, {
-  guards: [RolesGuard],
+  guards: [AuthGuard],
   CreateDTOClass: ProfileInputDTO,
   UpdateDTOClass: ProfileInputDTO,
   create: { many: { disabled: true } },
@@ -23,6 +23,6 @@ export class ProfileResolver extends CRUDResolver(ProfileDto, {
   @Mutation(() => AccessToken)
   async login(@Args('login') loginInput: LoginInput) {
     const profile = await this.service.login(loginInput)
-    return new AccessToken(profile)
+    return AccessToken.fromProfile(profile)
   }
 }

@@ -9,8 +9,8 @@ import * as jwt from 'jsonwebtoken'
 import { JwtPayload } from 'src/jwt/jwt.payload.model'
 
 @Injectable()
-export class RolesGuard implements CanActivate {
-  private readonly logger = new Logger(RolesGuard.name)
+export class AuthGuard implements CanActivate {
+  private readonly logger = new Logger(AuthGuard.name)
 
   canActivate(context: ExecutionContext): boolean {
     try {

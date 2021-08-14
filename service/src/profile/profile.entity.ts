@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
-@Entity()
+@Entity({ name: 'profiles' })
 export class ProfileEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string

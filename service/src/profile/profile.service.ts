@@ -5,9 +5,12 @@ import { Repository } from 'typeorm'
 import { ProfileEntity } from './profile.entity'
 import * as argon2 from 'argon2'
 import { LoginInput } from './inputs/login.input'
+import { Logger } from '@nestjs/common'
 
 @QueryService(ProfileEntity)
 export class ProfileService extends TypeOrmQueryService<ProfileEntity> {
+  logger = new Logger(ProfileService.name)
+
   constructor(
     @InjectRepository(ProfileEntity) repo: Repository<ProfileEntity>,
   ) {
