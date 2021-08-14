@@ -21,6 +21,9 @@ import { ProfileModule } from './profile/profile.module'
       autoSchemaFile: 'schema.graphql',
       debug: true,
       tracing: true,
+      context: ({ req }) => {
+        if (req && req.headers) return { headers: req.headers }
+      },
       formatError: (err) => {
         if (err.originalError instanceof QueryFailedError) {
           return { message: err.originalError.driverError?.detail }
