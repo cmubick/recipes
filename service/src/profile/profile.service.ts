@@ -21,8 +21,7 @@ export class ProfileService extends TypeOrmQueryService<ProfileEntity> {
   async signUp(signUpInput: ProfileInputDTO): Promise<ProfileEntity> {
     try {
       const profile = this.repo.create(signUpInput)
-      const createdProfile = await this.repo.save(profile)
-      return createdProfile
+      return await this.repo.save(profile)
     } catch (error) {
       this.logger.error(error)
     }

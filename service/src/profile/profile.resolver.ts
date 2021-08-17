@@ -24,7 +24,8 @@ export class ProfileResolver extends CRUDResolver(ProfileDto, {
   @Mutation(() => AccessToken)
   async signUp(@Args('signUp') signUpInput: ProfileInputDTO) {
     const createdProfile = await this.service.signUp(signUpInput)
-    if (!createdProfile) throw new PreconditionFailedException('Could not sign up new user!')
+    if (!createdProfile)
+      throw new PreconditionFailedException('Could not sign up new user!')
     return AccessToken.fromProfile(createdProfile)
   }
 
