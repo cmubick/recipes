@@ -6,6 +6,7 @@ import { ProfileService } from './profile.service'
 import { LoginInput } from './inputs/login.input'
 import { AuthGuard } from 'src/guards/auth.guard'
 import { AccessToken } from 'src/jwt/access-token.model'
+import { PreconditionFailedException } from '@nestjs/common'
 
 @Resolver(() => ProfileDto)
 export class ProfileResolver extends CRUDResolver(ProfileDto, {
@@ -18,6 +19,13 @@ export class ProfileResolver extends CRUDResolver(ProfileDto, {
 }) {
   constructor(readonly service: ProfileService) {
     super(service)
+  }
+
+  @Mutation(() => AccessToken)
+  async signUp(@Args('signUp') signUpInput: ProfileInputDTO) {
+    const createdProfile = await this.service.signUp(signUpInput)
+    if (!createdProfile) throw new PreconditionFailedException('Could not sign up new user!')
+    return AccessToken.fromProfile(createdProfile)
   }
 
   @Mutation(() => AccessToken)
