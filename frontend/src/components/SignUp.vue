@@ -1,12 +1,17 @@
 <template>
-  <div class="login-form">
+  <div class="signup-form">
     <div class="p-d-flex p-jc-center">
       <Card class="card">
         <template #title>
-          <div class="title">Sign up</div>
+          <div class="title">
+            Sign up
+          </div>
         </template>
         <template #content>
-          <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
+          <form
+            @submit.prevent="handleSubmit(!v$.$invalid)"
+            class="p-fluid"
+          >
             <div class="p-field">
               <div class="p-float-label p-input-icon-right">
                 <i class="pi pi-envelope" />
@@ -19,8 +24,7 @@
                 <label
                   for="email"
                   :class="{ 'p-error': v$.email.$invalid && submitted }"
-                  >Email</label
-                >
+                >Email</label>
               </div>
               <span v-if="v$.email.$error && submitted">
                 <span
@@ -34,13 +38,12 @@
               <small
                 v-else-if="
                   (v$.email.$invalid && submitted) ||
-                  v$.email.$pending.$response
+                    v$.email.$pending.$response
                 "
                 class="p-error"
-                >{{
-                  v$.email.required.$message.replace("Value", "Email")
-                }}</small
-              >
+              >{{
+                v$.email.required.$message.replace("Value", "Email")
+              }}</small>
             </div>
             <div class="p-field">
               <div class="p-float-label p-input-icon-right">
@@ -54,8 +57,7 @@
                 <label
                   for="fullName"
                   :class="{ 'p-error': v$.fullName.$invalid && submitted }"
-                  >Full name</label
-                >
+                >Full name</label>
               </div>
               <span v-if="v$.fullName.$error && submitted">
                 <span
@@ -69,13 +71,12 @@
               <small
                 v-else-if="
                   (v$.fullName.$invalid && submitted) ||
-                  v$.fullName.$pending.$response
+                    v$.fullName.$pending.$response
                 "
                 class="p-error"
-                >{{
-                  v$.fullName.required.$message.replace("Value", "Full name")
-                }}</small
-              >
+              >{{
+                v$.fullName.required.$message.replace("Value", "Full name")
+              }}</small>
             </div>
             <div class="p-field">
               <div class="p-float-label">
@@ -89,19 +90,17 @@
                 <label
                   for="password"
                   :class="{ 'p-error': v$.password.$invalid && submitted }"
-                  >Password</label
-                >
+                >Password</label>
               </div>
               <small
                 v-if="
                   (v$.password.$invalid && submitted) ||
-                  v$.password.$pending.$response
+                    v$.password.$pending.$response
                 "
                 class="p-error"
-                >{{
-                  v$.password.required.$message.replace("Value", "Password")
-                }}</small
-              >
+              >{{
+                v$.password.required.$message.replace("Value", "Password")
+              }}</small>
             </div>
             <div class="p-field">
               <div class="p-float-label">
@@ -119,14 +118,18 @@
                   :class="{
                     'p-error': v$.confirmPassword.$invalid && submitted,
                   }"
-                  >Confirm password</label
-                >
+                >Confirm password</label>
               </div>
-              <small v-if="!$v.confirmPassword.sameAsPassword" class="p-error"
-                >Passwords must match.</small
-              >
+              <small
+                v-if="v$.confirmPassword.sameAsPassword.$invalid && submitted"
+                class="p-error"
+              >Passwords must match.</small>
             </div>
-            <Button type="submit" label="Submit" class="p-mt-2" />
+            <Button
+              type="submit"
+              label="Submit"
+              class="p-mt-2"
+            />
           </form>
         </template>
       </Card>
@@ -135,35 +138,36 @@
 </template>
 
 <script>
-import { useMutation } from '@vue/apollo-composable';
-import { email, required, sameAs } from '@vuelidate/validators';
-import { useVuelidate } from '@vuelidate/core';
-import gql from 'graphql-tag';
-import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useMutation } from '@vue/apollo-composable'
+import { email, required, sameAs } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core'
+import gql from 'graphql-tag'
+import { reactive, ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default {
-  setup() {
-    const router = useRouter();
+  setup () {
+    const router = useRouter()
 
-    const submitted = ref(false);
+    const submitted = ref(false)
     const state = reactive({
       fullName: '',
       email: '',
       password: '',
       confirmPassword: '',
-    });
+    })
 
-    const rules = {
+    const rules = computed(() => ({
       fullName: { required },
       email: { required, email },
       password: { required },
       confirmPassword: {
-        sameAsPassword: sameAs('password'),
+        required,
+        sameAsPassword: sameAs(state.password),
       },
-    };
+    }))
 
-    const v$ = useVuelidate(rules, state);
+    const v$ = useVuelidate(rules, state)
 
     const SIGN_UP_MUTATION = gql`
       mutation signUp($signUp: ProfileInput!) {
@@ -171,11 +175,11 @@ export default {
           access_token
         }
       }
-    `;
-    const { mutate, onDone } = useMutation(SIGN_UP_MUTATION);
+    `
+    const { mutate, onDone } = useMutation(SIGN_UP_MUTATION)
 
     const handleSubmit = (isFormValid) => {
-      submitted.value = true;
+      submitted.value = true
       if (isFormValid) {
         mutate({
           signUp: {
@@ -183,45 +187,45 @@ export default {
             email: state.email,
             password: state.password,
           },
-        });
+        })
       }
-    };
+    }
 
     onDone(({ data }) => {
-      const token = data.signUp.access_token;
+      const token = data.signUp.access_token
       if (typeof localStorage !== 'undefined' && token) {
-        localStorage.setItem('token', token);
+        localStorage.setItem('token', token)
       }
-      router.push({ name: 'secure' });
-    });
+      router.push({ name: 'secure' })
+    })
 
     return {
       state,
       v$,
       handleSubmit,
       submitted,
-    };
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
-.login-form {
-  margin-top: 36px;
-  .card {
-    min-width: 450px;
+  .signup-form {
+    margin-top: 36px;
+    .card {
+      min-width: 450px;
 
-    .title {
-      text-align: center;
-    }
+      .title {
+        text-align: center;
+      }
 
-    form {
-      margin-top: 2rem;
-    }
+      form {
+        margin-top: 2rem;
+      }
 
-    .p-field {
-      margin-bottom: 1.5rem;
+      .p-field {
+        margin-bottom: 1.5rem;
+      }
     }
   }
-}
 </style>
