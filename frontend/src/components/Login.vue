@@ -65,6 +65,15 @@
               class="p-mt-2"
             />
           </form>
+          <router-link
+            to="/signup"
+            class="signup-link"
+          >
+            <Button
+              class="p-button-text signup-btn"
+              label="Don't have an account?"
+            />
+          </router-link>
         </template>
       </Card>
     </div>
@@ -153,5 +162,14 @@ export default {
             margin-bottom: 1.5rem;
         }
     }
+  }
+
+  .signup-btn {
+    margin-top: 16px;
+    width: 100%;
+  }
+
+  .signup-link {
+    text-decoration: none;
   }
 </style>
