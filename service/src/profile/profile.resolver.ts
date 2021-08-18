@@ -6,7 +6,11 @@ import { ProfileService } from './profile.service'
 import { LoginInput } from './inputs/login.input'
 import { AuthGuard } from 'src/guards/auth.guard'
 import { AccessToken } from 'src/jwt/access-token.model'
-import { PreconditionFailedException } from '@nestjs/common'
+import {
+  Logger,
+  PreconditionFailedException,
+  UnauthorizedException,
+} from '@nestjs/common'
 
 @Resolver(() => ProfileDto)
 export class ProfileResolver extends CRUDResolver(ProfileDto, {
@@ -17,6 +21,8 @@ export class ProfileResolver extends CRUDResolver(ProfileDto, {
   update: { many: { disabled: true } },
   delete: { disabled: true },
 }) {
+  logger = new Logger(ProfileResolver.name)
+
   constructor(readonly service: ProfileService) {
     super(service)
   }
@@ -32,6 +38,7 @@ export class ProfileResolver extends CRUDResolver(ProfileDto, {
   @Mutation(() => AccessToken)
   async login(@Args('login') loginInput: LoginInput) {
     const profile = await this.service.login(loginInput)
+    if (!profile) throw new UnauthorizedException('Login failed')
     return AccessToken.fromProfile(profile)
   }
 }
