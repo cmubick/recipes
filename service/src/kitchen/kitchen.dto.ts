@@ -1,27 +1,23 @@
 import {
-  FilterableField,
-  IDField,
   FilterableCursorConnection,
+  FilterableField,
 } from '@nestjs-query/query-graphql'
 import { ID, ObjectType } from '@nestjs/graphql'
-import { KitchenDto } from 'src/kitchen/kitchen.dto'
+import { ProfileDto } from 'src/profile/profile.dto'
 
-@ObjectType('Profile')
+@ObjectType('Kitchen')
 // @Authorize({
 //   authorize: (context: UserContext) => ({ id: { eq: context.user.sub } }),
 // })
-@FilterableCursorConnection('kitchens', () => KitchenDto, {
+@FilterableCursorConnection('profiles', () => ProfileDto, {
   disableRemove: true,
 })
-export class ProfileDto {
-  @IDField(() => ID)
+export class KitchenDto {
+  @FilterableField(() => ID)
   id!: string
 
   @FilterableField()
-  email!: string
-
-  @FilterableField()
-  fullName!: string
+  name!: string
 
   @FilterableField()
   created!: Date

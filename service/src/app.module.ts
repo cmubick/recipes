@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { QueryFailedError } from 'typeorm'
-import { IngredientItemEntity } from './ingredient-item/ingredient-item.entity'
 import { IngredientItemModule } from './ingredient-item/ingredient-item.module'
 import { IngredientModule } from './ingredient/ingredient.module'
 import { ProfileModule } from './profile/profile.module'
 import { RecipeModule } from './recipe/recipe.module'
+import { KitchenModule } from './kitchen/kitchen.module'
 
 @Module({
   imports: [
@@ -42,6 +42,7 @@ import { RecipeModule } from './recipe/recipe.module'
     RecipeModule,
     IngredientModule,
     IngredientItemModule,
+    KitchenModule,
   ],
 })
 export class AppModule {}
