@@ -12,6 +12,7 @@ import { KitchenDto } from 'src/kitchen/kitchen.dto'
 // })
 @FilterableCursorConnection('kitchens', () => KitchenDto, {
   disableRemove: true,
+  disableUpdate: true,
 })
 export class ProfileDto {
   @IDField(() => ID)

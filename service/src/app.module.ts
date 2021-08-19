@@ -7,37 +7,64 @@ import { IngredientModule } from './ingredient/ingredient.module'
 import { ProfileModule } from './profile/profile.module'
 import { RecipeModule } from './recipe/recipe.module'
 import { KitchenModule } from './kitchen/kitchen.module'
+import { ConfigModule } from '@nestjs/config'
+import { ConfigurationModule } from './config/config.module'
+import { ConfigurationService } from './config/config.service'
+import configuration from './config/config'
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      database: 'test',
-      username: 'postgres',
-      password: 'password',
-      autoLoadEntities: true,
-      synchronize: true,
-      // dropSchema: true,
-      logging: true,
+    ConfigModule.forRoot({
+      load: [configuration],
+      cache: true,
+      isGlobal: true,
     }),
-    GraphQLModule.forRoot({
-      playground: true,
-      autoSchemaFile: 'schema.graphql',
-      buildSchemaOptions: {
-        numberScalarMode: 'integer',
-      },
-      debug: true,
-      tracing: true,
-      context: ({ req }) => {
-        if (req && req.headers) return { headers: req.headers }
-      },
-      formatError: (err) => {
-        if (err.originalError instanceof QueryFailedError) {
-          return { message: err.originalError.driverError?.detail }
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigurationModule],
+      inject: [ConfigurationService],
+      useFactory: async (configService: ConfigurationService) => {
+        const { host, port, database, username } = configService.dbConfig
+        return {
+          type: 'postgres',
+          host,
+          port,
+          database,
+          username,
+          password: 'password',
+          autoLoadEntities: true,
+          migrationsRun: true,
+          synchronize: false,
+          logging: configService.debug,
+          // dropSchema: true,
         }
-        return err
       },
     }),
+    GraphQLModule.forRootAsync({
+      imports: [ConfigurationModule],
+      inject: [ConfigurationService],
+      useFactory: async (configService: ConfigurationService) => {
+        const { schema } = configService.graphqlConfig
+        return {
+          playground: configService.debug,
+          autoSchemaFile: schema,
+          buildSchemaOptions: {
+            numberScalarMode: 'integer',
+          },
+          debug: configService.debug,
+          tracing: configService.debug,
+          context: ({ req }) => {
+            if (req && req.headers) return { headers: req.headers }
+          },
+          formatError: (err) => {
+            if (err.originalError instanceof QueryFailedError) {
+              return { message: err.originalError.driverError?.detail }
+            }
+            return err
+          },
+        }
+      },
+    }),
+    ConfigurationModule,
     ProfileModule,
     RecipeModule,
     IngredientModule,

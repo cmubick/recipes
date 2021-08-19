@@ -8,8 +8,14 @@ import { IngredientDto } from 'src/ingredient/ingredient.dto'
 import { RecipeDto } from 'src/recipe/recipe.dto'
 
 @ObjectType('IngredientItem')
-@FilterableRelation('ingredient', () => IngredientDto)
-@FilterableRelation('recipe', () => RecipeDto)
+@FilterableRelation('ingredient', () => IngredientDto, {
+  disableUpdate: true,
+  disableRemove: true,
+})
+@FilterableRelation('recipe', () => RecipeDto, {
+  disableRemove: true,
+  disableUpdate: true,
+})
 export class IngredientItemDto {
   @IDField(() => ID)
   id!: string

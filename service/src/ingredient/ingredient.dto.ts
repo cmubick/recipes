@@ -3,12 +3,15 @@ import {
   FilterableRelation,
   IDField,
 } from '@nestjs-query/query-graphql'
-import { Float, ID, ObjectType } from '@nestjs/graphql'
+import { ID, ObjectType } from '@nestjs/graphql'
 import { IngredientItemDto } from 'src/ingredient-item/ingredient-item.dto'
 import { IngredientType } from './ingredient.entity'
 
 @ObjectType('Ingredient')
-@FilterableRelation('ingredientItem', () => IngredientItemDto)
+@FilterableRelation('ingredientItem', () => IngredientItemDto, {
+  disableUpdate: true,
+  disableRemove: true,
+})
 export class IngredientDto {
   @IDField(() => ID)
   id!: string
@@ -18,9 +21,6 @@ export class IngredientDto {
 
   @FilterableField()
   unit!: IngredientType
-
-  @FilterableField(() => Float)
-  quantity!: number
 
   @FilterableField()
   created!: Date
