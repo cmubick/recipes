@@ -7,7 +7,10 @@ import { ID, ObjectType } from '@nestjs/graphql'
 import { IngredientItemDto } from 'src/ingredient-item/ingredient-item.dto'
 
 @ObjectType('Recipe')
-@FilterableCursorConnection('ingredientItems', () => IngredientItemDto)
+@FilterableCursorConnection('ingredientItems', () => IngredientItemDto, {
+  disableRemove: true,
+  disableUpdate: true,
+})
 export class RecipeDto {
   @IDField(() => ID)
   id!: string

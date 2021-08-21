@@ -1,4 +1,4 @@
-import { ProfileInputDTO } from './inputs/profile.input'
+import { ProfileInput } from './inputs/profile.input'
 import { CRUDResolver } from '@nestjs-query/query-graphql'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { ProfileDto } from './profile.dto'
@@ -11,13 +11,14 @@ import {
   PreconditionFailedException,
   UnauthorizedException,
 } from '@nestjs/common'
+import { ProfileUpdateInput } from './inputs/profile-update.input'
 
 @Resolver(() => ProfileDto)
 export class ProfileResolver extends CRUDResolver(ProfileDto, {
   guards: [AuthGuard],
-  CreateDTOClass: ProfileInputDTO,
-  UpdateDTOClass: ProfileInputDTO,
-  create: { many: { disabled: true } },
+  CreateDTOClass: ProfileInput,
+  UpdateDTOClass: ProfileUpdateInput,
+  create: { disabled: true },
   update: { many: { disabled: true } },
   delete: { disabled: true },
 }) {
@@ -28,7 +29,7 @@ export class ProfileResolver extends CRUDResolver(ProfileDto, {
   }
 
   @Mutation(() => AccessToken)
-  async signUp(@Args('signUp') signUpInput: ProfileInputDTO) {
+  async signUp(@Args('signUp') signUpInput: ProfileInput) {
     const createdProfile = await this.service.signUp(signUpInput)
     if (!createdProfile)
       throw new PreconditionFailedException('Could not sign up new user!')

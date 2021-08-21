@@ -15,6 +15,12 @@
 > yarn start:debug
 ```
 
+### How to generate migrations
+#### (Note: migrations are set to autorun on startup)
+```
+> yarn typeorm migration:generate -n <SOME_NAME>
+```
+
 # Running playground
 Navigate to [http://localhost:3000/graphql](http://localhost:3000/graphql)
 

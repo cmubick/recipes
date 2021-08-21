@@ -2,7 +2,7 @@ import { InputType } from '@nestjs/graphql'
 import { IsEmail, IsString, MinLength } from 'class-validator'
 
 @InputType('ProfileInput')
-export class ProfileInputDTO {
+export class ProfileInput {
   @IsEmail()
   email!: string
 

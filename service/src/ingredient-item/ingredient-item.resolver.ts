@@ -3,12 +3,14 @@ import { PreconditionFailedException } from '@nestjs/common'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { IngredientItemDto } from './ingredient-item.dto'
 import { IngredientItemService } from './ingredient-item.service'
+import { IngredientItemCreateInput } from './inputs/ingredient-item.create.input'
 import { IngredientItemUpdateInput } from './inputs/ingredient-item.update.input'
 
 @Resolver(() => IngredientItemDto)
 export class IngredientItemResolver extends CRUDResolver(IngredientItemDto, {
   UpdateDTOClass: IngredientItemUpdateInput,
   create: { disabled: true },
+  update: { many: { disabled: true } },
   delete: { disabled: true },
 }) {
   constructor(readonly service: IngredientItemService) {
@@ -17,7 +19,7 @@ export class IngredientItemResolver extends CRUDResolver(IngredientItemDto, {
 
   @Mutation(() => IngredientItemDto)
   async createIngredientItem(
-    @Args('input') input: IngredientItemUpdateInput,
+    @Args('input') input: IngredientItemCreateInput,
   ): Promise<IngredientItemDto> {
     const ingredientItem = await this.service.createOne({
       quantity: input.quantity,

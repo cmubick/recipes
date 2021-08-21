@@ -6,7 +6,7 @@ import { ProfileEntity } from './profile.entity'
 import * as argon2 from 'argon2'
 import { LoginInput } from './inputs/login.input'
 import { Logger } from '@nestjs/common'
-import { ProfileInputDTO } from './inputs/profile.input'
+import { ProfileInput } from './inputs/profile.input'
 
 @QueryService(ProfileEntity)
 export class ProfileService extends TypeOrmQueryService<ProfileEntity> {
@@ -18,7 +18,7 @@ export class ProfileService extends TypeOrmQueryService<ProfileEntity> {
     super(repo)
   }
 
-  async signUp(signUpInput: ProfileInputDTO): Promise<ProfileEntity> {
+  async signUp(signUpInput: ProfileInput): Promise<ProfileEntity> {
     try {
       return await this.createOne({
         ...signUpInput,
