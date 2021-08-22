@@ -32,8 +32,9 @@ import configuration from './config/config'
           username,
           password: 'password',
           autoLoadEntities: true,
-          migrationsRun: true,
-          synchronize: false,
+          migrationsRun: !configService.debug,
+          synchronize: configService.debug,
+          migrations: ['dist/migrations/**/*.js'],
           logging: configService.debug,
           // dropSchema: true,
         }
